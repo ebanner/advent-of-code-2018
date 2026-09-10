@@ -41,9 +41,9 @@ for line in lines:
 df = pd.DataFrame(rows, columns=['ts', 'guard', 'action'])
 
 codes, _ = pd.factorize(df.guard)
-df.guard = codes
+df['index'] = codes
 
-df = df[['guard', 'ts', 'action']]
+df = df[['index', 'ts', 'action', 'guard']]
 
 df.to_csv('guards.csv', index=False, header=False)
 
