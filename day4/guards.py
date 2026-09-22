@@ -1,15 +1,46 @@
 import pandas as pd
+from datetime import datetime
 
 
-with open('guards.txt') as f:
+with open('input') as f:
     lines = [line.strip() for line in f.readlines()]
+
+dts = []
+rests = []
+for line in lines:
+    tokens = line.split()
+    ts, rest = ' '.join(tokens[:2]), ' '.join(tokens[2:])
+
+    dt = datetime.strptime(ts, "[%Y-%m-%d %H:%M]")
+    
+    dts.append(dt)
+    rests.append(rest)
+
+df = pd.DataFrame({'dt': dts, 'rest': rests}).sort_values(by='dt')
+
+print(df)
+print()
+
+rows = []
+for dt, rest in df.values.tolist():
+    row = [dt.strftime("%H:%M"), rest]
+    rows.append(row)
+
+lines = []
+for row in rows:
+    line = ' '.join(row)
+    lines.append(line)
+
+for line in lines:
+    print(line)
+print()
 
 GUARD = None
 
 rows = []
-
 for line in lines:
-    ts, *rest = line.split()
+    tokens = line.split()
+    ts, *rest = tokens
     
     if rest[0] == 'Guard':
         _, guard, *_ = rest
@@ -20,8 +51,11 @@ for line in lines:
 
 lines = [' '.join(row) for row in rows]
 
-rows = []
+for line in lines:
+    print(line)
+print()
 
+rows = []
 for line in lines:
     ts, guard, *rest = line.split()
     ts_ = ts.split(':')[1]
@@ -41,9 +75,8 @@ for line in lines:
 df = pd.DataFrame(rows, columns=['ts', 'guard', 'action'])
 
 codes, _ = pd.factorize(df.guard)
-df['index'] = codes
+df['index'] = codes + 1
 
-df = df[['index', 'ts', 'action', 'guard']]
+df = df[['index', 'ts', 'guard', 'action']]
 
 df.to_csv('guards.csv', index=False, header=False)
-
