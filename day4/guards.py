@@ -18,9 +18,6 @@ for line in lines:
 
 df = pd.DataFrame({'dt': dts, 'rest': rests}).sort_values(by='dt')
 
-print(df)
-print()
-
 rows = []
 for dt, rest in df.values.tolist():
     row = [dt.strftime("%H:%M"), rest]
@@ -30,10 +27,6 @@ lines = []
 for row in rows:
     line = ' '.join(row)
     lines.append(line)
-
-for line in lines:
-    print(line)
-print()
 
 GUARD = None
 
@@ -50,10 +43,6 @@ for line in lines:
         rows.append(row)
 
 lines = [' '.join(row) for row in rows]
-
-for line in lines:
-    print(line)
-print()
 
 rows = []
 for line in lines:
